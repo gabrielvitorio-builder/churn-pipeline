@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# Testes e cobertura
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Dados e modelos (o dataset bruto e o modelo campeao sao versionados de forma explicita)
+data/processed/
+data/interim/
+models/*
+!models/.gitkeep
+!models/churn_model.joblib
+!models/model_metadata.json
+
+# IDE e sistema
+.vscode/
+.idea/
+.DS_Store
+
+# Segredos e deploy
+.env
+.vercel/
+
+# Logs e tracking local
+*.log
+mlruns/
