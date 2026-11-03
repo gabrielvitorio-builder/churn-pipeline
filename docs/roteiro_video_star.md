@@ -1,78 +1,216 @@
-# Roteiro do video (5 minutos, metodo STAR)
+# Roteiro e script do video (5 minutos, metodo STAR)
 
-Duracao estimada de 4min30s, com cerca de 580 palavras faladas (ritmo de 130 palavras por minuto). As indicacoes de tela ficam entre colchetes e nao sao lidas.
+Este documento tem duas partes. A primeira e o roteiro, com o que aparece na tela em cada momento. A segunda e o script, com o texto sugerido para falar. O texto tem cerca de 590 palavras, que levam 4min30s de fala em ritmo de 130 palavras por minuto. Com os cliques da demonstracao, o video fica perto de 4min50s, entao o ensaio com cronometro e importante. Se passar de 4min55s, aplique os cortes indicados no plano B.
 
-## Situation (0:00 a 0:50)
+## Parte 1. Roteiro
 
-[Tela. Slide ou README aberto, com o titulo do projeto.]
+### Visao geral
 
-Oi, eu sou o Gabriel e vou apresentar o meu Tech Challenge. O cenario e o de uma operadora de telecomunicacoes que esta perdendo clientes e precisa saber, antes do cancelamento acontecer, quem esta em risco.
+| Bloco | Tempo | Duracao | Palavras | Objetivo |
+|---|---|---|---|---|
+| Situation | 0:00 a 0:40 | 40s | 93 | Apresentar o problema de negocio e o dataset |
+| Task | 0:40 a 1:15 | 35s | 78 | Dizer qual era a tarefa, os objetivos tecnicos e as metricas |
+| Action | 1:15 a 3:05 | 110s | 233 | Mostrar as decisoes tecnicas (dados, modelos, engenharia, API) |
+| Result | 3:05 a 4:30 | 85s | 184 | Demonstrar a API e os resultados, com limitacoes |
 
-[Tela. Notebook 01, grafico de distribuicao do alvo.]
+O ritmo considerado e de 130 palavras por minuto. Se a sua fala for mais rapida ou mais lenta, ajuste cortando ou acrescentando frases do bloco Action.
 
-Eu usei o dataset publico Telco Customer Churn, da IBM, com 7.043 clientes e dados de contrato, servicos, cobranca e tempo de casa. Cerca de 26,5% desses clientes cancelaram, entao o problema e desbalanceado, e isso muda a forma de medir o modelo, porque um modelo que sempre diz que o cliente fica acertaria 73% e nao serviria para nada.
+### Cena a cena
 
-## Task (0:50 a 1:30)
+| Cena | Tempo | O que aparece na tela | O que fazer |
+|---|---|---|---|
+| 1 | 0:00 a 0:15 | README.md aberto no VS Code, no topo, com o titulo e a tabela de resultados | Aparecer na camera, se quiser, e cumprimentar. Depois deixar so a tela |
+| 2 | 0:15 a 0:40 | `notebooks/01_eda_baseline.ipynb`, grafico de distribuicao do alvo (barras 73% e 26,5%) | Apontar o cursor para as duas barras |
+| 3 | 0:40 a 1:15 | `docs/ml_canvas.md`, secao de metricas com a formula do valor liquido | Rolar devagar ate a formula e parar nela |
+| 4 | 1:15 a 1:45 | Notebook 01, grafico "Taxa de churn por categoria" (contrato, internet, pagamento) | Passar o cursor sobre a barra de contrato mensal e a de cheque eletronico |
+| 5 | 1:45 a 2:05 | Explorador de arquivos do VS Code com a pasta `src/churn`, depois `preprocessing.py` | Abrir `preprocessing.py` e mostrar as duas pipelines (numerica e categorica) |
+| 6 | 2:05 a 2:35 | Notebook 02, tabela comparativa e grafico das curvas ROC | Mostrar a tabela, depois as curvas |
+| 7 | 2:35 a 3:05 | Terminal com `python -m pytest` rodando, depois `src/churn_api/main.py` | Rodar o pytest ao vivo e deixar aparecer "13 passed" |
+| 8 | 3:05 a 3:25 | Navegador em `http://127.0.0.1:8000/docs`, GET `/health` executado | Clicar em Try it out e Execute no `/health` |
+| 9 | 3:25 a 3:50 | Swagger, POST `/predict` com o cliente de risco alto (JSON na secao "Cliente A") | Colar o JSON, executar e dar zoom na resposta |
+| 10 | 3:50 a 4:05 | Mesmo POST com o cliente de risco baixo (JSON "Cliente B") | Trocar o corpo, executar e mostrar a resposta |
+| 11 | 4:05 a 4:30 | `docs/model_card.md`, tabela de subgrupos, depois o historico de commits no terminal (`git log --oneline`) | Parar na linha dos idosos e encerrar no log |
 
-[Tela. docs/ml_canvas.md.]
+### JSON para a demonstracao
 
-A minha tarefa foi construir um pipeline completo, da analise exploratoria ate um modelo servido por API. Os objetivos tecnicos foram treinar um baseline de Regressao Logistica, comparar com Random Forest e com uma rede neural MLP usando validacao cruzada, escolher um campeao e entregar o modelo numa API FastAPI com testes.
+**Cliente A (esperado, probabilidade 0,8688, risco alto)**
 
-Defini o ROC-AUC como metrica principal, com F1 e recall da classe churn de apoio, e uma metrica de negocio, que e o valor liquido de uma campanha de retencao, considerando o custo de abordar cada cliente e o ganho de reter quem ia sair.
+```json
+{
+  "gender": "Female",
+  "SeniorCitizen": 0,
+  "Partner": "Yes",
+  "Dependents": "No",
+  "tenure": 2,
+  "PhoneService": "Yes",
+  "MultipleLines": "No",
+  "InternetService": "Fiber optic",
+  "OnlineSecurity": "No",
+  "OnlineBackup": "No",
+  "DeviceProtection": "No",
+  "TechSupport": "No",
+  "StreamingTV": "Yes",
+  "StreamingMovies": "Yes",
+  "Contract": "Month-to-month",
+  "PaperlessBilling": "Yes",
+  "PaymentMethod": "Electronic check",
+  "MonthlyCharges": 95.5,
+  "TotalCharges": 191.0
+}
+```
 
-## Action (1:30 a 3:40)
+**Cliente B (esperado, probabilidade 0,0622, risco baixo)**
 
-[Tela. Notebook 01, graficos de churn por contrato e por pagamento.]
+```json
+{
+  "gender": "Female",
+  "SeniorCitizen": 0,
+  "Partner": "Yes",
+  "Dependents": "No",
+  "tenure": 60,
+  "PhoneService": "Yes",
+  "MultipleLines": "No",
+  "InternetService": "DSL",
+  "OnlineSecurity": "Yes",
+  "OnlineBackup": "No",
+  "DeviceProtection": "No",
+  "TechSupport": "Yes",
+  "StreamingTV": "No",
+  "StreamingMovies": "No",
+  "Contract": "Two year",
+  "PaperlessBilling": "No",
+  "PaymentMethod": "Bank transfer (automatic)",
+  "MonthlyCharges": 40.0,
+  "TotalCharges": 2400.0
+}
+```
 
-Na exploracao, o que mais chamou atencao foi o contrato. Clientes com contrato mensal cancelam 42,7%, contra 2,8% nos de dois anos. Fibra otica e pagamento por cheque eletronico tambem aparecem com churn muito acima da media. Os unicos dados ausentes eram 11 valores de TotalCharges, de clientes novos, que eu tratei dentro do pipeline para nao vazar informacao do teste.
+### Preparacao antes de gravar
 
-[Tela. src/churn, mostrando preprocessing.py e models.py.]
+1. Ativar o ambiente virtual e subir a API em um terminal separado com `uvicorn churn_api.main:app --app-dir src`.
+2. Deixar abertas, nesta ordem, as abas do VS Code (README, notebook 01, `ml_canvas.md`, `preprocessing.py`, notebook 02, `main.py`, `model_card.md`) e a aba do navegador com `/docs`.
+3. Conferir que os notebooks estao com as saidas visiveis. Se estiverem sem graficos, rode todas as celulas antes.
+4. Fechar notificacoes, e-mail e mensageiros. Aumentar o zoom do editor para 125% ou 150%, para o texto ficar legivel em 1080p.
+5. Fazer um ensaio completo com cronometro. O tempo final precisa ficar entre 4min20s e 4min55s.
+6. Gravar em 1080p, com microfone proximo e sem eco. OBS Studio, Xbox Game Bar (Windows + G) ou a gravacao do proprio Teams funcionam.
 
-Para a engenharia, separei o codigo em modulos na pasta src. O pre-processamento e um ColumnTransformer dentro de um Pipeline do Scikit-Learn, com seed fixa em 42 e divisao estratificada. Os notebooks ficam so para experimentar e explicar.
+### Plano B se algo falhar na gravacao
 
-[Tela. Notebook 02, tabela comparativa e curvas ROC.]
+| Problema | O que fazer |
+|---|---|
+| A API nao sobe | Mostrar o teste de API no pytest (`test_predict_returns_probability`) e comentar que o servico foi validado por testes |
+| O navegador nao abre `/docs` | Usar `curl` no terminal, com o comando do README |
+| O tempo estourou | Cortar a cena 5 (estrutura de pastas) e encurtar a cena 4 |
+| Errou uma frase | Continuar normalmente e corrigir na edicao. Pausas curtas sao melhores que recomecar |
 
-Treinei os tres modelos com validacao cruzada de cinco folds. O Random Forest ficou com o maior AUC medio, 0,847, seguido pela Regressao Logistica, com 0,846, e pelo MLP, com 0,842. Sendo bem honesto, a diferenca e menor que o desvio entre folds, entao os modelos sao praticamente equivalentes. Escolhi o Random Forest pelo criterio definido de antemao, e ele tambem teve o melhor F1 e o melhor valor de negocio no teste.
+### Publicacao
 
-[Tela. Terminal com pytest passando e depois src/churn_api/main.py.]
-
-Depois, construi a API com FastAPI e dois endpoints, health e predict, com validacao de entrada via Pydantic. Escrevi 13 testes com pytest, cobrindo o pre-processamento, as metricas, a predicao e a API, e todos passam.
-
-## Result (3:40 a 4:45)
-
-[Tela. Terminal com uvicorn rodando e a pagina /docs aberta.]
-
-Vou mostrar a API funcionando. O health responde que o modelo esta carregado. Agora envio um cliente com contrato mensal, fibra otica, dois meses de casa e pagamento por cheque eletronico.
-
-[Tela. Executar o POST /predict no Swagger e mostrar a resposta.]
-
-A resposta traz probabilidade de churn de 87%, risco alto. Se eu troco para um cliente com contrato de dois anos, DSL e cinco anos de casa, a probabilidade cai para cerca de 6%, risco baixo. O modelo se comporta de forma coerente com o que a exploracao mostrou.
-
-[Tela. docs/model_card.md, tabela de subgrupos.]
-
-No teste, o campeao chegou a AUC de 0,84, com recall de 80%, ou seja, encontra 8 de cada 10 clientes que cancelariam. A precisao e de 52%, entao metade dos abordados nao sairia, e isso precisa caber no custo da campanha. No Model Card eu documentei essa e outras limitacoes, como o dataset estatico, as premissas de custo ilustrativas e um ponto de atencao com vies, porque clientes idosos sao sinalizados com muito mais frequencia que os demais.
-
-[Tela. README e historico de commits.]
-
-O repositorio tem README com instalacao e execucao, dependencias, testes e o deploy na Vercel. Obrigado por assistir.
+Exportar em MP4 e subir como nao listado no YouTube ou em uma pasta do Drive com acesso por link. Conferir o link em uma janela anonima antes de enviar.
 
 ---
 
-## Checklist de gravacao
+## Parte 2. Script (texto sugerido)
 
-1. Deixar a API rodando antes de comecar a gravar (`uvicorn churn_api.main:app --app-dir src`).
-2. Abrir antes as abas do README, do notebook 01 (graficos), do notebook 02 (tabela e ROC), do Model Card e do `/docs`.
-3. Testar o tempo com um cronometro. Se passar de 5 minutos, corte a parte sobre estrutura de pastas.
-4. Falar com calma nos numeros, mostrar o cursor em cada metrica citada.
-5. Exportar em MP4 e conferir que o audio esta claro.
+Os trechos entre colchetes sao indicacoes de tela e nao entram na fala. Ajuste o nome e as expressoes para o seu jeito de falar.
 
-## Numeros citados (conferir antes de gravar)
+### Situation (0:00 a 0:40)
+
+[Cena 1. README aberto.]
+
+> Oi, eu sou o Gabriel e este e o meu Tech Challenge da pos-graduacao. Uma operadora de telecomunicacoes esta perdendo clientes em ritmo acelerado e precisa saber, antes do cancelamento, quem esta em risco.
+
+[Cena 2. Grafico de distribuicao do alvo.]
+
+> Eu trabalhei com o dataset publico Telco Customer Churn, da IBM, com sete mil e quarenta e tres clientes. Cerca de vinte e seis e meio por cento cancelaram, o que deixa o problema desbalanceado, e por isso a acuracia sozinha engana, ja que um modelo que sempre diz que o cliente fica acertaria setenta e tres por cento.
+
+### Task (0:40 a 1:15)
+
+[Cena 3. ML Canvas, secao de metricas.]
+
+> A minha tarefa foi construir um pipeline completo, da analise exploratoria ate uma API. Treinei um baseline de Regressao Logistica, comparei com Random Forest e MLP usando validacao cruzada, escolhi um campeao e servi o modelo com FastAPI e testes.
+>
+> Defini o ROC-AUC como metrica principal, com F1 e recall de apoio, e uma metrica de negocio, o valor liquido da campanha de retencao, que desconta o custo de cada abordagem do ganho de reter quem ia sair.
+
+### Action (1:15 a 3:05)
+
+[Cena 4. Grafico de churn por categoria.]
+
+> Na exploracao, o que mais chamou atencao foi o contrato. Clientes com contrato mensal cancelam quarenta e dois virgula sete por cento, contra dois virgula oito por cento nos contratos de dois anos. Fibra otica e pagamento por cheque eletronico tambem ficam bem acima da media. Os unicos dados ausentes eram onze valores de cobranca total, de clientes novos, tratados dentro do pipeline para nao vazar informacao do teste.
+
+[Cena 5. Pasta `src/churn` e `preprocessing.py`.]
+
+> Separei o codigo produtivo em modulos na pasta src e deixei os notebooks para experimentar e explicar. O pre-processamento e um ColumnTransformer dentro de um Pipeline do Scikit-Learn, com seed fixada em quarenta e dois e divisao estratificada entre treino e teste.
+
+[Cena 6. Tabela comparativa e curvas ROC.]
+
+> Treinei os tres modelos com validacao cruzada de cinco folds. O Random Forest ficou com o maior AUC medio, zero virgula oitocentos e quarenta e sete, contra zero virgula oitocentos e quarenta e seis da Regressao Logistica e zero virgula oitocentos e quarenta e dois do MLP. Essa diferenca e menor que a variacao entre os folds, entao os modelos sao praticamente equivalentes. Escolhi o Random Forest pelo criterio definido antes do treino, e ele tambem teve o melhor F1 e o melhor valor de negocio no teste.
+
+[Cena 7. Terminal com pytest e depois `main.py`.]
+
+> Depois construi a API com FastAPI, com os endpoints health e predict e validacao de entrada com Pydantic. Escrevi treze testes com pytest, que cobrem pre-processamento, metricas, predicao e a API, e todos passam.
+
+### Result (3:05 a 4:30)
+
+[Cena 8. Swagger, GET `/health`.]
+
+> Vou mostrar a API funcionando. O health responde que o servico esta no ar e que o modelo foi carregado.
+
+[Cena 9. POST `/predict` com o Cliente A.]
+
+> Agora envio um cliente com contrato mensal, fibra otica, dois meses de casa e pagamento por cheque eletronico. A resposta traz probabilidade de churn de oitenta e sete por cento e risco alto.
+
+[Cena 10. POST `/predict` com o Cliente B.]
+
+> Se eu troco por um cliente com contrato de dois anos, DSL, cinco anos de casa e suporte tecnico, a probabilidade cai para seis por cento, risco baixo. O modelo se comporta do jeito que a exploracao previa.
+
+[Cena 11. Model Card, tabela de subgrupos, e depois `git log`.]
+
+> No teste, o campeao chegou a AUC de zero virgula oitenta e quatro e recall de oitenta por cento, ou seja, encontra oito de cada dez clientes que cancelariam. A precisao e de cinquenta e dois por cento, entao metade dos abordados nao sairia, e a campanha precisa comportar isso. No Model Card documentei as limitacoes, como o dataset estatico e as premissas de custo ilustrativas, e um alerta de vies, porque clientes idosos sao sinalizados com muito mais frequencia.
+>
+> O repositorio tem README, dependencias, testes e commits por etapa. Obrigado por assistir.
+
+---
+
+## Parte 3. Material de apoio
+
+### Numeros citados e onde conferir
 
 | Informacao | Valor | Fonte |
 |---|---|---|
-| Clientes e taxa de churn | 7.043 e 26,5% | notebook 01 |
-| Churn contrato mensal e dois anos | 42,7% e 2,8% | notebook 01 |
-| AUC CV dos modelos | 0,8471, 0,8460 e 0,8423 | `docs/results/model_comparison.csv` |
+| Clientes e taxa de churn | 7.043 e 26,5% | Notebook 01 |
+| Divisao treino e teste | 5.634 e 1.409 | `docs/model_card.md` |
+| Churn por contrato (mensal, um ano, dois anos) | 42,7%, 11,3% e 2,8% | Notebook 01 |
+| Churn por internet (fibra, DSL, sem internet) | 41,9%, 19,0% e 7,4% | Notebook 01 |
+| Churn com cheque eletronico | 45,3% | Notebook 01 |
+| Tenure mediano de quem cancela e de quem fica | 10 e 38 meses | Notebook 01 |
+| Valores ausentes em TotalCharges | 11 | Notebook 01 |
+| AUC na validacao cruzada (RF, LR, MLP) | 0,8471, 0,8460 e 0,8423 | `docs/results/model_comparison.csv` |
+| AUC no teste do campeao | 0,8425 | `docs/results/model_comparison.csv` |
 | Recall e precisao do campeao no teste | 80,2% e 51,9% | `docs/results/model_comparison.csv` |
+| Limiar de decisao | 0,449 | `models/model_metadata.json` |
+| Valor liquido no teste (RF, LR, MLP) | R$ 19.320, R$ 18.600 e R$ 18.540 | `docs/results/model_comparison.csv` |
 | Testes automatizados | 13 | `pytest` |
-| Churn flagged idosos e nao idosos | 65,3% e 36,5% | `docs/results/subgroup_metrics.csv` |
+| Idosos e nao idosos sinalizados | 65,3% e 36,5% | `docs/results/subgroup_metrics.csv` |
+
+### Perguntas que podem aparecer e respostas sugeridas
+
+**Por que ROC-AUC e nao acuracia?**
+Porque 73% dos clientes nao cancelam. Um modelo que sempre diz "fica" teria 73% de acuracia sem identificar nenhum churner. O ROC-AUC mede a capacidade de ranquear quem tem mais risco, independentemente do limiar.
+
+**Por que o Random Forest e o campeao se a Regressao Logistica e quase igual?**
+Pelo criterio definido antes do treino, que era o maior ROC-AUC medio na validacao cruzada. A diferenca e pequena e esta dentro da variacao entre folds, e isso esta dito no Model Card. Se a interpretabilidade pesar mais, a Regressao Logistica e uma escolha valida.
+
+**Como voce evitou vazamento de dados?**
+Imputacao, escala e one-hot estao dentro do Pipeline. A cada fold da validacao cruzada eles sao ajustados so com os dados de treino daquele fold. O conjunto de teste foi usado uma unica vez, no final, e o limiar foi escolhido com previsoes out-of-fold do treino.
+
+**Como o limiar de 0,449 foi escolhido?**
+Maximizando o F1 sobre previsoes out-of-fold do treino, sem olhar o teste. Com custos reais, o ideal seria escolher o limiar que maximiza o valor de negocio.
+
+**A precisao de 52% nao e baixa?**
+E um custo assumido. O recall de 80% mostra que o modelo captura a maior parte dos churners, e, com as premissas do ML Canvas, a campanha ainda tem valor liquido positivo. Para uma operacao real, o limiar e ajustado ao custo da abordagem.
+
+**O que voce faria com mais tempo?**
+Busca de hiperparametros, calibracao das probabilidades, teste sem os atributos genero e idoso para reduzir risco de vies, custos reais de retencao e monitoramento do modelo em producao.
+
+**Por que Vercel?**
+Roda FastAPI com scikit-learn sem adaptacao e tem deploy direto a partir do GitHub. O Cloudflare Workers tem suporte limitado a scikit-learn no ambiente Python.
