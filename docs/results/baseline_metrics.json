@@ -1,0 +1,27 @@
+{
+  "model": "LogisticRegression (baseline)",
+  "cv_5fold_train": {
+    "roc_auc": {
+      "mean": 0.846,
+      "std": 0.0124
+    },
+    "f1": {
+      "mean": 0.6286,
+      "std": 0.0232
+    },
+    "precision": {
+      "mean": 0.5174,
+      "std": 0.0188
+    },
+    "recall": {
+      "mean": 0.8013,
+      "std": 0.0379
+    }
+  },
+  "test": {
+    "roc_auc": 0.8414,
+    "f1": 0.613,
+    "precision": 0.5034,
+    "recall": 0.7834
+  }
+}
