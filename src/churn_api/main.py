@@ -6,15 +6,22 @@ Execucao local:
 
 from __future__ import annotations
 
-from fastapi import FastAPI, HTTPException
+import sys
+from pathlib import Path
 
-from churn.predict import (
+# Garante que `churn` e `churn_api` sejam importaveis quando o modulo e carregado
+# pelo caminho completo (src.churn_api.main), como faz a Vercel.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from fastapi import FastAPI, HTTPException  # noqa: E402
+
+from churn.predict import (  # noqa: E402
     ModelNotAvailableError,
     load_metadata,
     load_model,
     predict_customer,
 )
-from churn_api.schemas import CustomerInput, HealthOutput, PredictionOutput
+from churn_api.schemas import CustomerInput, HealthOutput, PredictionOutput  # noqa: E402
 
 app = FastAPI(
     title="Churn Prediction API",
