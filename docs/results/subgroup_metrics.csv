@@ -1,0 +1,5 @@
+atributo,grupo,clientes,churn_real,taxa_sinalizados,precisao,recall
+gender,Female,687,0.2809,0.4061,0.5412,0.7824
+gender,Male,722,0.2507,0.4141,0.4983,0.8232
+SeniorCitizen,0,1187,0.2325,0.3648,0.4896,0.7681
+SeniorCitizen,1,222,0.4414,0.6532,0.6069,0.898
